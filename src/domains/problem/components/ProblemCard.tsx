@@ -1,45 +1,58 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Problem } from '../types';
+import { Card, Tag, Typography, Flex } from 'antd';
+import { useNavigate } from 'react-router';
+
+import type { Problem } from '../types';
 
 interface ProblemCardProps {
-    problem: Problem;
+  problem: Problem;
 }
 
 const DIFFICULTY_LABELS = {
-    beginner: '초급',
-    intermediate: '중급',
-    advanced: '고급'
+  beginner: '초급',
+  intermediate: '중급',
+  advanced: '고급',
 } as const;
 
 const DIFFICULTY_COLORS = {
-    beginner: 'bg-green-100 text-green-800',
-    intermediate: 'bg-yellow-100 text-yellow-800',
-    advanced: 'bg-red-100 text-red-800'
+  beginner: 'green',
+  intermediate: 'gold',
+  advanced: 'red',
 } as const;
 
 export function ProblemCard({ problem }: ProblemCardProps) {
-    return (
-        <Link
-            to={`/problem/${problem.id}`}
-            className="block p-6 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+  const navigate = useNavigate();
+  return (
+    <Card
+      hoverable
+      style={{ borderRadius: 12, marginBottom: 12 }}
+      onClick={() => navigate(`/problem/${problem.id}`)}
+      styles={{ body: { padding: 20 } }}
+    >
+      <Flex
+        justify="space-between"
+        align="flex-start"
+        style={{ marginBottom: 12 }}
+      >
+        <Typography.Title level={5} style={{ margin: 0 }}>
+          {problem.title}
+        </Typography.Title>
+        <Tag
+          color={DIFFICULTY_COLORS[problem.difficulty]}
+          style={{ fontSize: 12, borderRadius: 16, padding: '2px 10px' }}
         >
-            <div className="flex justify-between items-start mb-3">
-                <h3 className="text-lg font-semibold text-gray-900">
-                    {problem.title}
-                </h3>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${DIFFICULTY_COLORS[problem.difficulty]}`}>
           {DIFFICULTY_LABELS[problem.difficulty]}
-        </span>
-            </div>
-
-            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                {problem.description}
-            </p>
-
-            <div className="text-xs text-gray-500">
-                {new Date(problem.createdAt).toLocaleDateString('ko-KR')}
-            </div>
-        </Link>
-    );
+        </Tag>
+      </Flex>
+      <Typography.Paragraph
+        type="secondary"
+        ellipsis={{ rows: 2 }}
+        style={{ marginBottom: 16, fontSize: 14 }}
+      >
+        {problem.description}
+      </Typography.Paragraph>
+      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+        {new Date(problem.createdAt).toLocaleDateString('ko-KR')}
+      </Typography.Text>
+    </Card>
+  );
 }

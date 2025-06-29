@@ -1,65 +1,81 @@
-import { Link } from 'react-router-dom';
-import { useProblems } from '../domains/problem/hooks/useProblems';
+import { Typography, Button, Row, Col, Flex } from 'antd';
+import { Link } from 'react-router';
+
 import { ProblemCard } from '../domains/problem/components/ProblemCard';
+import { useProblems } from '../domains/problem/hooks/useProblems';
 
 export function HomePage() {
-    const { getProblemsByDifficulty } = useProblems();
+  const { getProblemsByDifficulty } = useProblems();
 
-    const beginnerProblems = getProblemsByDifficulty('beginner');
-    const intermediateProblems = getProblemsByDifficulty('intermediate');
-    const advancedProblems = getProblemsByDifficulty('advanced');
+  const beginnerProblems = getProblemsByDifficulty('beginner');
+  const intermediateProblems = getProblemsByDifficulty('intermediate');
+  const advancedProblems = getProblemsByDifficulty('advanced');
 
-    return (
-        <div className="max-w-6xl mx-auto px-4 py-8">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                    JavaScript 배열 메소드 마스터
-                </h1>
-                <p className="text-xl text-gray-600 mb-8">
-                    배열 메소드를 연습하고 마스터하세요
-                </p>
-                <Link
-                    to="/create"
-                    className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    새 문제 만들기
-                </Link>
-            </div>
-
-            <div className="space-y-12">
-                <section>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        초급 ({beginnerProblems.length}문제)
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {beginnerProblems.map(problem => (
-                            <ProblemCard key={problem.id} problem={problem} />
-                        ))}
-                    </div>
-                </section>
-
-                <section>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        중급 ({intermediateProblems.length}문제)
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {intermediateProblems.map(problem => (
-                            <ProblemCard key={problem.id} problem={problem} />
-                        ))}
-                    </div>
-                </section>
-
-                <section>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        고급 ({advancedProblems.length}문제)
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {advancedProblems.map(problem => (
-                            <ProblemCard key={problem.id} problem={problem} />
-                        ))}
-                    </div>
-                </section>
-            </div>
-        </div>
-    );
+  return (
+    <Flex
+      vertical
+      gap={48}
+      style={{
+        width: '100%',
+        maxWidth: 1100,
+        margin: '0 auto',
+        padding: '40px 0',
+      }}
+    >
+      <Flex vertical gap={16} style={{ width: '100%', alignItems: 'center' }}>
+        <Typography.Title level={1} style={{ margin: 0, textAlign: 'center' }}>
+          JavaScript 배열 메소드 마스터
+        </Typography.Title>
+        <Typography.Paragraph
+          type="secondary"
+          style={{ fontSize: 18, margin: 0, textAlign: 'center' }}
+        >
+          배열 메소드를 연습하고 마스터하세요
+        </Typography.Paragraph>
+        <Link to="/create">
+          <Button type="primary" size="large" style={{ borderRadius: 8 }}>
+            새 문제 만들기
+          </Button>
+        </Link>
+      </Flex>
+      <Flex vertical>
+        <section>
+          <Typography.Title level={2} style={{ marginBottom: 24 }}>
+            초급 ({beginnerProblems.length}문제)
+          </Typography.Title>
+          <Row gutter={[24, 24]}>
+            {beginnerProblems.map((problem) => (
+              <Col xs={24} sm={12} lg={8} key={problem.id}>
+                <ProblemCard problem={problem} />
+              </Col>
+            ))}
+          </Row>
+        </section>
+        <section>
+          <Typography.Title level={2} style={{ marginBottom: 24 }}>
+            중급 ({intermediateProblems.length}문제)
+          </Typography.Title>
+          <Row gutter={[24, 24]}>
+            {intermediateProblems.map((problem) => (
+              <Col xs={24} sm={12} lg={8} key={problem.id}>
+                <ProblemCard problem={problem} />
+              </Col>
+            ))}
+          </Row>
+        </section>
+        <section>
+          <Typography.Title level={2} style={{ marginBottom: 24 }}>
+            고급 ({advancedProblems.length}문제)
+          </Typography.Title>
+          <Row gutter={[24, 24]}>
+            {advancedProblems.map((problem) => (
+              <Col xs={24} sm={12} lg={8} key={problem.id}>
+                <ProblemCard problem={problem} />
+              </Col>
+            ))}
+          </Row>
+        </section>
+      </Flex>
+    </Flex>
+  );
 }
