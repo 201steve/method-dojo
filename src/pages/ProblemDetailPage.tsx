@@ -1,12 +1,10 @@
 import type { Execution } from '@entities/index';
+import { ClipboardHelper, CodeEditor } from '@features/code-editing';
+import { useCodeExecution } from '@features/code-execution';
+import { useProblems } from '@features/problem-storage';
 import { Card, Typography, Row, Col, Button, Tag, Alert, Flex } from 'antd';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-
-import { ClipboardHelper } from '../domains/problem/components/ClipboardHelper';
-import { CodeEditor } from '../domains/problem/components/CodeEditor';
-import { useCodeExecution } from '../domains/problem/hooks/useCodeExecution';
-import { useProblems } from '../domains/problem/hooks/useProblems';
 
 export function ProblemDetailPage() {
   const { id } = useParams<{ id: string }>();

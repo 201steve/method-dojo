@@ -1,7 +1,6 @@
 import type { Problem, ProblemDifficulty } from '@entities/index';
+import { CodeEditor } from '@features/code-editing';
 import { Form, Input, Select, Button, Typography, Space } from 'antd';
-
-import { CodeEditor } from './CodeEditor';
 
 interface ProblemFormProps {
   initialProblem?: Problem;

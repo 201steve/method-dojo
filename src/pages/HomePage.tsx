@@ -1,8 +1,7 @@
+import { ProblemCard } from '@features/problem-browsing';
+import { useProblems } from '@features/problem-storage';
 import { Typography, Button, Row, Col, Flex } from 'antd';
 import { Link } from 'react-router';
-
-import { ProblemCard } from '../domains/problem/components/ProblemCard';
-import { useProblems } from '../domains/problem/hooks/useProblems';
 
 export function HomePage() {
   const { getProblemsByDifficulty } = useProblems();
@@ -46,10 +45,7 @@ export function HomePage() {
           <Row gutter={[24, 24]}>
             {beginnerProblems.map((problem) => (
               <Col xs={24} sm={12} lg={8} key={problem.id}>
-                <ProblemCard
-                  problem={problem}
-                  difficulty={problem.difficulty}
-                />
+                <ProblemCard problem={problem} />
               </Col>
             ))}
           </Row>
@@ -61,10 +57,7 @@ export function HomePage() {
           <Row gutter={[24, 24]}>
             {intermediateProblems.map((problem) => (
               <Col xs={24} sm={12} lg={8} key={problem.id}>
-                <ProblemCard
-                  problem={problem}
-                  difficulty={problem.difficulty}
-                />
+                <ProblemCard problem={problem} />
               </Col>
             ))}
           </Row>
@@ -76,10 +69,7 @@ export function HomePage() {
           <Row gutter={[24, 24]}>
             {advancedProblems.map((problem) => (
               <Col xs={24} sm={12} lg={8} key={problem.id}>
-                <ProblemCard
-                  problem={problem}
-                  difficulty={problem.difficulty}
-                />
+                <ProblemCard problem={problem} />
               </Col>
             ))}
           </Row>
