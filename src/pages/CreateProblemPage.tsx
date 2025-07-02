@@ -1,10 +1,9 @@
+import type { Problem } from '@entities/index';
 import { Card, Typography, Flex } from 'antd';
-import React from 'react';
 import { useNavigate } from 'react-router';
 
 import { ProblemForm } from '../domains/problem/components/ProblemForm';
 import { useProblems } from '../domains/problem/hooks/useProblems';
-import type { Problem } from '../domains/problem/types';
 
 export function CreateProblemPage() {
   const navigate = useNavigate();

@@ -46,7 +46,10 @@ export function HomePage() {
           <Row gutter={[24, 24]}>
             {beginnerProblems.map((problem) => (
               <Col xs={24} sm={12} lg={8} key={problem.id}>
-                <ProblemCard problem={problem} />
+                <ProblemCard
+                  problem={problem}
+                  difficulty={problem.difficulty}
+                />
               </Col>
             ))}
           </Row>
@@ -58,7 +61,10 @@ export function HomePage() {
           <Row gutter={[24, 24]}>
             {intermediateProblems.map((problem) => (
               <Col xs={24} sm={12} lg={8} key={problem.id}>
-                <ProblemCard problem={problem} />
+                <ProblemCard
+                  problem={problem}
+                  difficulty={problem.difficulty}
+                />
               </Col>
             ))}
           </Row>
@@ -70,7 +76,10 @@ export function HomePage() {
           <Row gutter={[24, 24]}>
             {advancedProblems.map((problem) => (
               <Col xs={24} sm={12} lg={8} key={problem.id}>
-                <ProblemCard problem={problem} />
+                <ProblemCard
+                  problem={problem}
+                  difficulty={problem.difficulty}
+                />
               </Col>
             ))}
           </Row>

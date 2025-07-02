@@ -1,3 +1,4 @@
+import type { Execution } from '@entities/index';
 import { Card, Typography, Row, Col, Button, Tag, Alert, Flex } from 'antd';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
@@ -6,7 +7,6 @@ import { ClipboardHelper } from '../domains/problem/components/ClipboardHelper';
 import { CodeEditor } from '../domains/problem/components/CodeEditor';
 import { useCodeExecution } from '../domains/problem/hooks/useCodeExecution';
 import { useProblems } from '../domains/problem/hooks/useProblems';
-import type { ProblemResult } from '../domains/problem/types';
 
 export function ProblemDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +16,7 @@ export function ProblemDetailPage() {
 
   const problem = getProblemById(id!);
   const [userCode, setUserCode] = useState('');
-  const [result, setResult] = useState<ProblemResult | null>(null);
+  const [result, setResult] = useState<Execution | null>(null);
 
   // problem이 로드될 때마다 userCode 초기화
   useEffect(() => {

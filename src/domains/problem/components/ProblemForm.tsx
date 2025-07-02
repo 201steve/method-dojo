@@ -1,6 +1,5 @@
+import type { Problem, ProblemDifficulty } from '@entities/index';
 import { Form, Input, Select, Button, Typography, Space } from 'antd';
-
-import type { Problem, ProblemDifficulty } from '../types';
 
 import { CodeEditor } from './CodeEditor';
 

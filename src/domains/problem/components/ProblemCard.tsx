@@ -1,10 +1,10 @@
+import type { Problem, ProblemDifficulty } from '@entities/index';
 import { Card, Tag, Typography, Flex } from 'antd';
 import { useNavigate } from 'react-router';
 
-import type { Problem } from '../types';
-
 interface ProblemCardProps {
   problem: Problem;
+  difficulty: ProblemDifficulty;
 }
 
 const DIFFICULTY_LABELS = {
