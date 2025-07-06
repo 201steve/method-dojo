@@ -25,7 +25,7 @@ export function ProblemCard({ problem }: ProblemCardProps) {
       hoverable
       style={{ borderRadius: 12, marginBottom: 12 }}
       onClick={() => navigate(`/problem/${problem.id}`)}
-      styles={{ body: { padding: 20 } }}
+      styles={{ body: { padding: '20px' } }}
     >
       <Flex
         justify="space-between"
@@ -49,9 +49,6 @@ export function ProblemCard({ problem }: ProblemCardProps) {
       >
         {problem.description}
       </Typography.Paragraph>
-      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-        {new Date(problem.createdAt).toLocaleDateString('ko-KR')}
-      </Typography.Text>
     </Card>
   );
 }

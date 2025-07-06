@@ -25,7 +25,7 @@ export function ProblemDetailPage() {
 
   if (!problem) {
     return (
-      <Flex vertical>
+      <Flex vertical style={{ width: '100%' }}>
         <Typography.Title level={3}>문제를 찾을 수 없습니다</Typography.Title>
         <Button type="primary" onClick={() => navigate('/')}>
           홈으로 돌아가기
@@ -45,7 +45,7 @@ export function ProblemDetailPage() {
   };
 
   return (
-    <Flex vertical>
+    <Flex vertical style={{ width: '100%', padding: '40px' }}>
       <Button
         type="link"
         onClick={() => navigate('/')}
@@ -72,9 +72,6 @@ export function ProblemDetailPage() {
                   ? '중급'
                   : '고급'}
             </Tag>
-            <Typography.Text type="secondary">
-              {new Date(problem.createdAt).toLocaleDateString('ko-KR')}
-            </Typography.Text>
           </Flex>
           <Typography.Paragraph type="secondary">
             {problem.description}
@@ -177,7 +174,7 @@ export function ProblemDetailPage() {
                         {result.success ? '📋 실행 출력' : '🐛 실행 오류'}
                       </Typography.Text>
                     </div>
-                    <div style={{ padding: 16 }}>
+                    <div style={{ padding: '16px' }}>
                       {result.success ? (
                         <pre
                           style={{

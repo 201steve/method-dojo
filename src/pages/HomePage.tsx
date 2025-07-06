@@ -15,10 +15,9 @@ export function HomePage() {
       vertical
       gap={48}
       style={{
+        height: '100vh',
         width: '100%',
-        maxWidth: 1100,
-        margin: '0 auto',
-        padding: '40px 0',
+        padding: '100px',
       }}
     >
       <Flex vertical gap={16} style={{ width: '100%', alignItems: 'center' }}>
