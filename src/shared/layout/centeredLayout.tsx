@@ -9,7 +9,7 @@ const CenteredLayout = () => {
       justify="center"
       style={{ height: '100%', width: '100%' }}
     >
-      <Flex style={{ width: '100%', padding: '20px' }}>
+      <Flex style={{ width: '100%', padding: '20px;' }}>
         <Outlet />
       </Flex>
     </Flex>

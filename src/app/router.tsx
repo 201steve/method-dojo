@@ -1,4 +1,3 @@
-import { CreateProblemPage } from '@pages/CreateProblemPage';
 import { HomePage } from '@pages/HomePage';
 import { ProblemDetailPage } from '@pages/ProblemDetailPage';
 import CenteredLayout from '@shared/layout/centeredLayout';
@@ -16,10 +15,6 @@ const router = createBrowserRouter([
       {
         path: 'problem/:id',
         element: <ProblemDetailPage />,
-      },
-      {
-        path: 'create',
-        element: <CreateProblemPage />,
       },
     ],
   },
