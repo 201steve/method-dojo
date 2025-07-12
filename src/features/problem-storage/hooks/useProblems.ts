@@ -25,39 +25,18 @@ export function useProblems() {
     }
   }, []);
 
-  const saveProblem = (problem: Problem) => {
-    const updatedProblems = [...problems, problem];
-    setProblems(updatedProblems);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProblems));
-  };
-
-  const updateProblem = (id: string, updatedProblem: Problem) => {
-    const updatedProblems = problems.map((p) =>
-      p.id === id ? updatedProblem : p
-    );
-    setProblems(updatedProblems);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProblems));
-  };
-
-  const deleteProblem = (id: string) => {
-    const updatedProblems = problems.filter((p) => p.id !== id);
-    setProblems(updatedProblems);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProblems));
-  };
-
-  const getProblemsByDifficulty = (difficulty: ProblemDifficulty) => {
+  const getProblemsByDifficulty = (
+    difficulty: ProblemDifficulty
+  ): Problem[] => {
     return problems.filter((p) => p.difficulty === difficulty);
   };
 
-  const getProblemById = (id: string) => {
+  const getProblemById = (id: string): Problem | undefined => {
     return problems.find((p) => p.id === id);
   };
 
   return {
     problems,
-    saveProblem,
-    updateProblem,
-    deleteProblem,
     getProblemsByDifficulty,
     getProblemById,
   };

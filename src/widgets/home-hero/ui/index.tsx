@@ -1,5 +1,4 @@
-import { Button, Flex, Typography } from 'antd';
-import { Link } from 'react-router';
+import { Flex, Typography } from 'antd';
 
 const HomeHero = () => {
   return (
@@ -13,11 +12,6 @@ const HomeHero = () => {
       >
         배열 메소드를 연습하고 마스터하세요
       </Typography.Paragraph>
-      <Link to="/create">
-        <Button type="primary" size="large" style={{ borderRadius: 8 }}>
-          새 문제 만들기
-        </Button>
-      </Link>
     </Flex>
   );
 };
