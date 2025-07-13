@@ -1,4 +1,6 @@
-import type { Problem } from '@entities/problem';
+import type { Problem } from '@entities/problem/types/type';
+import { getDifficultyColor } from '@shared/utils/get-difficulty-color';
+import { getDifficultyText } from '@shared/utils/get-difficulty-text';
 import { Card, Typography, Tag, Flex } from 'antd';
 
 interface ProblemInfoProps {
@@ -7,32 +9,6 @@ interface ProblemInfoProps {
 }
 
 export function ProblemInfo({ problem }: ProblemInfoProps) {
-  const getDifficultyColor = (difficulty: Problem['difficulty']): string => {
-    switch (difficulty) {
-      case 'beginner':
-        return 'green';
-      case 'intermediate':
-        return 'gold';
-      case 'advanced':
-        return 'red';
-      default:
-        return 'default';
-    }
-  };
-
-  const getDifficultyText = (difficulty: Problem['difficulty']): string => {
-    switch (difficulty) {
-      case 'beginner':
-        return '초급';
-      case 'intermediate':
-        return '중급';
-      case 'advanced':
-        return '고급';
-      default:
-        return '알 수 없음';
-    }
-  };
-
   return (
     <Card style={{ borderRadius: 12 }}>
       <Flex vertical>

@@ -1,4 +1,4 @@
-import type { Execution } from '@entities/index';
+import type { Execution } from '@entities/execution/types/type';
 import { useState } from 'react';
 
 export function useCodeExecution() {

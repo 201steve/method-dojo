@@ -1,5 +1,5 @@
 import { ProblemCard } from '@features/problem-browsing';
-import { useProblems } from '@features/problem-storage';
+import { useProblems } from '@features/problem-storage/hooks/useProblems';
 import { Col, Flex, Row, Space, Typography } from 'antd';
 
 const ProblemList = () => {

@@ -1,4 +1,4 @@
-import { ClipboardHelper, CodeEditor } from '@features/code-editing';
+import { CodeEditor } from '@features/code-editing';
 import { Card, Typography, Button, Alert, Flex } from 'antd';
 
 interface CodeWorkspaceProps {
@@ -34,7 +34,6 @@ export function CodeWorkspace({
       style={{ borderRadius: 12 }}
     >
       <Flex vertical>
-        <ClipboardHelper code={code} onCodeChange={onCodeChange} />
         <CodeEditor
           value={code}
           onChange={onCodeChange}

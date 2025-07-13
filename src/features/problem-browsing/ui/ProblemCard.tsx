@@ -1,22 +1,12 @@
-import type { Problem } from '@entities/index';
+import type { Problem } from '@entities/problem/types/type';
+import { getDifficultyColor } from '@shared/utils/get-difficulty-color';
+import { getDifficultyText } from '@shared/utils/get-difficulty-text';
 import { Card, Tag, Typography, Flex } from 'antd';
 import { useNavigate } from 'react-router';
 
 interface ProblemCardProps {
   problem: Problem;
 }
-
-const DIFFICULTY_LABELS = {
-  beginner: '초급',
-  intermediate: '중급',
-  advanced: '고급',
-} as const;
-
-const DIFFICULTY_COLORS = {
-  beginner: 'green',
-  intermediate: 'gold',
-  advanced: 'red',
-} as const;
 
 export function ProblemCard({ problem }: ProblemCardProps) {
   const navigate = useNavigate();
@@ -36,10 +26,10 @@ export function ProblemCard({ problem }: ProblemCardProps) {
           {problem.title}
         </Typography.Title>
         <Tag
-          color={DIFFICULTY_COLORS[problem.difficulty]}
+          color={getDifficultyColor(problem.difficulty)}
           style={{ fontSize: 12, borderRadius: 16, padding: '2px 10px' }}
         >
-          {DIFFICULTY_LABELS[problem.difficulty]}
+          {getDifficultyText(problem.difficulty)}
         </Tag>
       </Flex>
       <Typography.Paragraph

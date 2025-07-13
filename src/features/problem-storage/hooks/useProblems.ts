@@ -1,5 +1,5 @@
-import type { ProblemDifficulty, Problem } from '@entities/index';
-import { FOR_EACH_PROBLEMS } from '@entities/index';
+import { FOR_EACH_PROBLEMS } from '@entities/problem/model/for-each';
+import type { ProblemDifficulty, Problem } from '@entities/problem/types/type';
 import { useState, useEffect } from 'react';
 
 const STORAGE_KEY = 'js-array-problems';

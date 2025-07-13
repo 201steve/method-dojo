@@ -1,7 +1,7 @@
-// src/features/problem-detail/hooks/useProblemDetail.ts
-import type { Execution, Problem } from '@entities/index';
+import type { Execution } from '@entities/execution/types/type';
+import type { Problem } from '@entities/problem/types/type';
 import { useCodeExecution } from '@features/code-execution';
-import { useProblems } from '@features/problem-storage';
+import { useProblems } from '@features/problem-storage/hooks/useProblems';
 import { useState, useEffect } from 'react';
 
 interface UseProblemDetailReturn {

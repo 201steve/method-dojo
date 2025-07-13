@@ -1,2 +1,1 @@
-// src/features/problem-detail/index.ts
-export { useProblemDetail } from './hooks';
+export * from './hooks/useProblemDetail';

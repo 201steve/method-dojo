@@ -1,10 +1,10 @@
-// src/pages/ProblemDetailPage.tsx
 import { useProblemDetail } from '@features/problem-detail';
 import { PageNavigation } from '@shared/ui';
-import { CodeWorkspace } from '@widgets/code-workspace';
-import { ExecutionResult } from '@widgets/execution-result';
-import { ProblemInfo } from '@widgets/problem-info';
-import { Typography, Row, Col, Button, Flex } from 'antd';
+import { ErrorState } from '@widgets/page-state/ui/error-state';
+import { LoadingState } from '@widgets/page-state/ui/loading-state';
+import { ProblemInfo } from '@widgets/problem-info/ui/problem-info';
+import { ProblemSolvingWorkspace } from '@widgets/problem-solving-workspace/ui';
+import { Flex } from 'antd';
 import { useParams, useNavigate } from 'react-router';
 
 export function ProblemDetailPage() {
@@ -25,24 +25,17 @@ export function ProblemDetailPage() {
 
   // 로딩 상태
   if (isLoading) {
-    return (
-      <Flex vertical style={{ width: '100%', padding: '40px' }}>
-        <Typography.Title level={3}>문제를 불러오는 중...</Typography.Title>
-      </Flex>
-    );
+    return <LoadingState message="문제를 불러오는 중..." />;
   }
 
   // 에러 상태
   if (error || !problem) {
     return (
-      <Flex vertical style={{ width: '100%', padding: '40px' }}>
-        <Typography.Title level={3}>
-          {error || '문제를 찾을 수 없습니다'}
-        </Typography.Title>
-        <Button type="primary" onClick={() => navigate('/')}>
-          홈으로 돌아가기
-        </Button>
-      </Flex>
+      <ErrorState
+        message={error || '문제를 찾을 수 없습니다'}
+        onRetry={() => navigate('/')}
+        retryText="홈으로 돌아가기"
+      />
     );
   }
 
@@ -52,24 +45,15 @@ export function ProblemDetailPage() {
 
       <ProblemInfo problem={problem} />
 
-      <Row gutter={[32, 32]}>
-        <Col xs={24} lg={12}>
-          <CodeWorkspace
-            code={userCode}
-            onCodeChange={handleCodeChange}
-            onRunCode={handleRunCode}
-            onReset={handleReset}
-            isExecuting={isExecuting}
-            editorHeight="400px"
-          />
-        </Col>
-        <Col xs={24} lg={12}>
-          <ExecutionResult
-            expectedOutput={problem.expectedOutput}
-            result={result}
-          />
-        </Col>
-      </Row>
+      <ProblemSolvingWorkspace
+        problem={problem}
+        code={userCode}
+        result={result}
+        isExecuting={isExecuting}
+        onCodeChange={handleCodeChange}
+        onRunCode={handleRunCode}
+        onReset={handleReset}
+      />
     </Flex>
   );
 }

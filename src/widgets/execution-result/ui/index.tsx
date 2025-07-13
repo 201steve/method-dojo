@@ -1,4 +1,4 @@
-import type { Execution } from '@entities/execution';
+import type { Execution } from '@entities/execution/types/type';
 import { Card, Typography, Alert, Flex } from 'antd';
 
 interface ExecutionResultProps {
