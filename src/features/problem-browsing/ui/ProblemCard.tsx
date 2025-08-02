@@ -2,19 +2,18 @@ import type { Problem } from '@entities/problem/types/type';
 import { getDifficultyColor } from '@shared/utils/get-difficulty-color';
 import { getDifficultyText } from '@shared/utils/get-difficulty-text';
 import { Card, Tag, Typography, Flex } from 'antd';
-import { useNavigate } from 'react-router';
 
 interface ProblemCardProps {
   problem: Problem;
+  onSelect?: (problem: Problem) => void;
 }
 
-export function ProblemCard({ problem }: ProblemCardProps) {
-  const navigate = useNavigate();
+export function ProblemCard({ problem, onSelect }: ProblemCardProps) {
   return (
     <Card
       hoverable
       style={{ borderRadius: 12, marginBottom: 12 }}
-      onClick={() => navigate(`/problem/${problem.id}`)}
+      onClick={() => onSelect?.(problem)}
       styles={{ body: { padding: '20px' } }}
     >
       <Flex

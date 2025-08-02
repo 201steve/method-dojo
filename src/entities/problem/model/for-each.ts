@@ -3,7 +3,7 @@ import type { Problem } from '../types/type';
 export const FOR_EACH_PROBLEMS: Problem[] = [
   // 초급 문제 (1-7)
   {
-    id: '1',
+    id: 'array-1',
     title: '배열 요소 출력하기',
     description: '다음 배열의 모든 요소를 콘솔에 출력하는 코드를 작성하세요.',
     difficulty: 'beginner',
@@ -14,7 +14,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: 'apple\nbanana\norange',
     testCases: [
       {
-        id: '1-1',
+        id: 'array-1-1',
         description: '모든 요소가 출력되어야 함',
         expectedResult: ['apple', 'banana', 'orange'],
       },
@@ -22,7 +22,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '2',
+    id: 'array-2',
     title: '배열 요소 대문자 변환',
     description: '다음 배열의 모든 요소를 대문자로 변환하여 콘솔에 출력하세요.',
     difficulty: 'beginner',
@@ -33,7 +33,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: 'SEOUL\nBUSAN\nDAEGU',
     testCases: [
       {
-        id: '2-1',
+        id: 'array-2-1',
         description: '모든 요소가 대문자로 출력되어야 함',
         expectedResult: ['SEOUL', 'BUSAN', 'DAEGU'],
       },
@@ -41,7 +41,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '3',
+    id: 'array-3',
     title: '배열 인덱스와 값 출력',
     description: '배열의 각 요소와 인덱스를 "인덱스: 값" 형태로 출력하세요.',
     difficulty: 'beginner',
@@ -53,7 +53,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '0: red\n1: green\n2: blue',
     testCases: [
       {
-        id: '3-1',
+        id: 'array-3-1',
         description: '인덱스와 값이 올바른 형태로 출력되어야 함',
         expectedResult: ['0: red', '1: green', '2: blue'],
       },
@@ -61,7 +61,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '4',
+    id: 'array-4',
     title: '짝수 인덱스 요소 출력',
     description: '배열에서 짝수 인덱스(0, 2, 4...)에 있는 요소만 출력하세요.',
     difficulty: 'beginner',
@@ -72,7 +72,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '10\n30\n50',
     testCases: [
       {
-        id: '4-1',
+        id: 'array-4-1',
         description: '짝수 인덱스 요소만 출력되어야 함',
         expectedResult: [10, 30, 50],
       },
@@ -80,7 +80,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '5',
+    id: 'array-5',
     title: '상품명 앞에 접두사 추가',
     description: '배열의 각 요소 앞에 "상품: "을 붙여서 출력하세요.',
     difficulty: 'beginner',
@@ -91,7 +91,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '상품: 연필\n상품: 지우개\n상품: 공책',
     testCases: [
       {
-        id: '5-1',
+        id: 'array-5-1',
         description: '모든 요소 앞에 "상품: "이 붙어야 함',
         expectedResult: ['상품: 연필', '상품: 지우개', '상품: 공책'],
       },
@@ -99,7 +99,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '6',
+    id: 'array-6',
     title: 'forEach로 배열 합계 구하기',
     description: 'forEach를 사용하여 배열 요소들의 합계를 구하세요.',
     difficulty: 'beginner',
@@ -113,7 +113,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '10000',
     testCases: [
       {
-        id: '6-1',
+        id: 'array-6-1',
         description: '합계가 10000이 되어야 함',
         expectedResult: 10000,
       },
@@ -121,7 +121,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '7',
+    id: 'array-7',
     title: 'forEach로 배열 복사',
     description:
       'forEach를 사용하여 source 배열의 모든 요소를 target 배열에 복사하세요.',
@@ -136,7 +136,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: "['a', 'b', 'c']",
     testCases: [
       {
-        id: '7-1',
+        id: 'array-7-1',
         description: 'target 배열이 source와 같아야 함',
         expectedResult: ['a', 'b', 'c'],
       },
@@ -145,7 +145,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
   },
   // 중급 문제 (8-14)
   {
-    id: '8',
+    id: 'array-8',
     title: '객체 배열에서 특정 속성 출력',
     description: '객체 배열에서 각 사용자의 이름만 출력하세요.',
     difficulty: 'intermediate',
@@ -160,7 +160,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: 'Alice\nBob\nCharlie',
     testCases: [
       {
-        id: '8-1',
+        id: 'array-8-1',
         description: '모든 사용자의 이름이 출력되어야 함',
         expectedResult: ['Alice', 'Bob', 'Charlie'],
       },
@@ -168,7 +168,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '9',
+    id: 'array-9',
     title: '조건부 카운팅',
     description: '80점 이상인 점수의 개수를 세는 코드를 작성하세요.',
     difficulty: 'intermediate',
@@ -182,7 +182,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '5',
     testCases: [
       {
-        id: '9-1',
+        id: 'array-9-1',
         description: '80점 이상인 점수의 개수가 5개여야 함',
         expectedResult: 5,
       },
@@ -190,7 +190,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '10',
+    id: 'array-10',
     title: '2차원 배열 순회',
     description: '2차원 배열의 모든 요소를 출력하세요.',
     difficulty: 'intermediate',
@@ -206,7 +206,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '1\n2\n3\n4\n5\n6\n7\n8\n9',
     testCases: [
       {
-        id: '10-1',
+        id: 'array-10-1',
         description: '모든 요소가 순서대로 출력되어야 함',
         expectedResult: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       },
@@ -214,7 +214,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '11',
+    id: 'array-11',
     title: 'Map 생성하기',
     description: '배열의 각 요소를 키로, 인덱스를 값으로 하는 Map을 만드세요.',
     difficulty: 'intermediate',
@@ -228,7 +228,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '0',
     testCases: [
       {
-        id: '11-1',
+        id: 'array-11-1',
         description: 'Map에 올바른 키-값 쌍이 저장되어야 함',
         expectedResult: new Map([
           ['laptop', 0],
@@ -240,7 +240,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '12',
+    id: 'array-12',
     title: '배열 요소 분리',
     description: '양수와 음수를 각각 다른 배열에 분리하세요.',
     difficulty: 'intermediate',
@@ -256,7 +256,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '[1, 3, 5, 7]\n[-2, -4, -6]',
     testCases: [
       {
-        id: '12-1',
+        id: 'array-12-1',
         description: '양수와 음수가 올바르게 분리되어야 함',
         expectedResult: { positives: [1, 3, 5, 7], negatives: [-2, -4, -6] },
       },
@@ -264,7 +264,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '13',
+    id: 'array-13',
     title: 'JSON 파싱 에러 처리',
     description: '유효한 JSON 문자열만 파싱하여 results 배열에 저장하세요.',
     difficulty: 'intermediate',
@@ -278,7 +278,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '[{name: "John"}, {age: 30}]',
     testCases: [
       {
-        id: '13-1',
+        id: 'array-13-1',
         description: '유효한 JSON만 파싱되어야 함',
         expectedResult: [{ name: 'John' }, { age: 30 }],
       },
@@ -286,7 +286,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: '14',
+    id: 'array-14',
     title: '복합 통계 계산',
     description: '각 작업의 완료/미완료 개수와 우선순위별 개수를 계산하세요.',
     difficulty: 'intermediate',
@@ -313,7 +313,7 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
     expectedOutput: '{ completed: 2, pending: 2, high: 2, medium: 1, low: 1 }',
     testCases: [
       {
-        id: '14-1',
+        id: 'array-14-1',
         description: '모든 통계가 올바르게 계산되어야 함',
         expectedResult: {
           completed: 2,
@@ -321,208 +321,6 @@ export const FOR_EACH_PROBLEMS: Problem[] = [
           high: 2,
           medium: 1,
           low: 1,
-        },
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-  // 고급 문제 (15-20)
-  {
-    id: '15',
-    title: '데이터 그룹화',
-    description: '카테고리별로 아이템을 그룹화하는 객체를 만드세요.',
-    difficulty: 'advanced',
-    initialCode: `const items = [
-    { name: 'apple', type: 'fruit' },
-    { name: 'carrot', type: 'vegetable' },
-    { name: 'banana', type: 'fruit' },
-    { name: 'broccoli', type: 'vegetable' }
-  ];
-  
-  const grouped = {};
-  
-  // 여기에 코드를 작성하세요
-  
-  console.log(grouped);
-  // { fruit: ['apple', 'banana'], vegetable: ['carrot', 'broccoli'] }
-  `,
-    expectedOutput:
-      '{ fruit: ["apple", "banana"], vegetable: ["carrot", "broccoli"] }',
-    testCases: [
-      {
-        id: '15-1',
-        description: '타입별로 올바르게 그룹화되어야 함',
-        expectedResult: {
-          fruit: ['apple', 'banana'],
-          vegetable: ['carrot', 'broccoli'],
-        },
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: '16',
-    title: 'WeakMap을 사용한 ID 할당',
-    description: '각 객체에 고유한 ID를 할당하는 WeakMap을 만드세요.',
-    difficulty: 'advanced',
-    initialCode: `const objects = [{}, {}, {}];
-  const idMap = new WeakMap();
-  let currentId = 1;
-  
-  // 여기에 코드를 작성하세요
-  
-  console.log(idMap.get(objects[0])); // 1
-  console.log(idMap.get(objects[1])); // 2
-  `,
-    expectedOutput: '1\n2',
-    testCases: [
-      {
-        id: '16-1',
-        description: '각 객체에 고유한 ID가 할당되어야 함',
-        expectedResult: [1, 2, 3],
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: '17',
-    title: 'Set을 사용한 중복 제거',
-    description: '중복을 제거하면서 Set에 요소들을 추가하세요.',
-    difficulty: 'advanced',
-    initialCode: `const duplicates = ['a', 'b', 'a', 'c', 'b', 'd'];
-  const uniqueSet = new Set();
-  
-  // 여기에 코드를 작성하세요
-  
-  console.log([...uniqueSet]); // ['a', 'b', 'c', 'd']
-  `,
-    expectedOutput: "['a', 'b', 'c', 'd']",
-    testCases: [
-      {
-        id: '17-1',
-        description: '중복이 제거된 고유한 요소들만 있어야 함',
-        expectedResult: ['a', 'b', 'c', 'd'],
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: '18',
-    title: '제너레이터를 사용한 순차 번호 매핑',
-    description: '각 요소에 순차적으로 증가하는 번호를 매핑하세요.',
-    difficulty: 'advanced',
-    initialCode: `function* numberGenerator() {
-    let i = 1;
-    while (true) yield i++;
-  }
-  
-  const items = ['first', 'second', 'third'];
-  const gen = numberGenerator();
-  const numbered = [];
-  
-  // 여기에 코드를 작성하세요
-  
-  console.log(numbered); // [{item: 'first', number: 1}, {item: 'second', number: 2}, ...]
-  `,
-    expectedOutput:
-      '[{item: "first", number: 1}, {item: "second", number: 2}, {item: "third", number: 3}]',
-    testCases: [
-      {
-        id: '18-1',
-        description: '각 요소에 순차적인 번호가 매핑되어야 함',
-        expectedResult: [
-          { item: 'first', number: 1 },
-          { item: 'second', number: 2 },
-          { item: 'third', number: 3 },
-        ],
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: '19',
-    title: '조건부 분기 처리',
-    description: '조건부로 다른 함수를 실행하는 코드를 작성하세요.',
-    difficulty: 'advanced',
-    initialCode: `const actions = [
-    { type: 'LOG', message: 'Hello' },
-    { type: 'WARN', message: 'Warning!' },
-    { type: 'ERROR', message: 'Error occurred' },
-    { type: 'LOG', message: 'Goodbye' }
-  ];
-  
-  const logs = [];
-  const warnings = [];
-  const errors = [];
-  
-  // 여기에 코드를 작성하세요
-  
-  console.log(logs); // ['Hello', 'Goodbye']
-  console.log(warnings); // ['Warning!']
-  console.log(errors); // ['Error occurred']
-  `,
-    expectedOutput: "['Hello', 'Goodbye']\n['Warning!']\n['Error occurred']",
-    testCases: [
-      {
-        id: '19-1',
-        description: '타입별로 올바르게 분류되어야 함',
-        expectedResult: {
-          logs: ['Hello', 'Goodbye'],
-          warnings: ['Warning!'],
-          errors: ['Error occurred'],
-        },
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: '20',
-    title: '복잡한 데이터 구조 변환',
-    description: '복잡한 데이터 구조를 변환하여 요약 통계를 만드세요.',
-    difficulty: 'advanced',
-    initialCode: `const employees = [
-    { 
-      name: 'John', 
-      department: 'IT', 
-      skills: ['JavaScript', 'Python'],
-      projects: [{ name: 'Project A', hours: 40 }, { name: 'Project B', hours: 20 }]
-    },
-    { 
-      name: 'Jane', 
-      department: 'Design', 
-      skills: ['Photoshop', 'Figma'],
-      projects: [{ name: 'Project C', hours: 60 }]
-    }
-  ];
-  
-  const summary = {
-    totalEmployees: 0,
-    departmentCount: {},
-    skillCount: {},
-    totalProjectHours: 0
-  };
-  
-  // 여기에 코드를 작성하세요
-  
-  console.log(summary);
-  // { 
-  //   totalEmployees: 2, 
-  //   departmentCount: {IT: 1, Design: 1}, 
-  //   skillCount: {JavaScript: 1, Python: 1, Photoshop: 1, Figma: 1},
-  //   totalProjectHours: 120 
-  // }
-  `,
-    expectedOutput:
-      '{ totalEmployees: 2, departmentCount: {IT: 1, Design: 1}, skillCount: {JavaScript: 1, Python: 1, Photoshop: 1, Figma: 1}, totalProjectHours: 120 }',
-    testCases: [
-      {
-        id: '20-1',
-        description: '모든 요약 통계가 올바르게 계산되어야 함',
-        expectedResult: {
-          totalEmployees: 2,
-          departmentCount: { IT: 1, Design: 1 },
-          skillCount: { JavaScript: 1, Python: 1, Photoshop: 1, Figma: 1 },
-          totalProjectHours: 120,
         },
       },
     ],
