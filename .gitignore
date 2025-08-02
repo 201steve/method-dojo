@@ -27,3 +27,5 @@ scratchpad.mdc
 lessons-learned.mdc
 memories.mdc
 /rules/*
+
+.env
