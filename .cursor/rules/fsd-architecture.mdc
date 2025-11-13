@@ -1,0 +1,331 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# FSD Architecture Guideline
+
+This document summarizes the principles and rules of Feature-Sliced Design (FSD) architecture, showcasing recommended patterns. Follow these guidelines when writing frontend code.
+
+# Layer Structure
+
+The project consists of the following layers, each with specific responsibilities:
+
+1. **app** - Application entry point, global settings, routing, styles, providers
+2. **pages** - Page components connected to routes
+3. **widgets** - Complex independent blocks that may include multiple entities and features
+4. **features** - Functional units handling user interactions and business logic
+5. **entities** - Business entities (domain models)
+6. **shared** - Shared utilities, libraries, UI components
+
+## Layer Dependency Rules
+
+**Rule:** Each layer can only depend on layers below it.
+
+**Reasoning:**
+- Maintains consistent dependency direction
+- Prevents circular dependencies
+- Increases code reusability
+
+#### Recommended Pattern:
+
+```
+app → pages → widgets → features → entities → shared
+```
+
+Examples:
+- `pages` can import from `widgets`, `features`, `entities`, `shared`
+- `features` can only import from `entities` and `shared`
+- `shared` can only import from within itself
+
+#### Forbidden Pattern:
+
+```typescript
+// features/class/hooks/useClassForm.ts
+import { ClassContentHeader } from "@/widgets/class/class-content-header"; // Forbidden: importing from higher layer
+
+// entities/curriculum/hooks/useCurriculum.ts
+import { filterByCategory } from "@/features/category/utils"; // Forbidden: importing from higher layer
+```
+
+# Slice Structure
+
+Each layer is divided into slices. Slices represent domain or functional areas.
+
+## Project's Main Slices
+
+- **class** - Class-related functionality
+- **curriculum** - Curriculum-related functionality
+- **admin** - Admin functionality
+- **auth** - Authentication-related functionality
+
+## Slice Dependency Rules
+
+**Rule:** Slices within the same layer should not directly depend on each other.
+
+**Reasoning:**
+- Reduces coupling between slices
+- Ensures independence of each slice
+- Improves maintainability
+
+#### Recommended Pattern:
+
+When communication between slices is necessary, use coordination at a higher layer or an event system.
+
+#### Forbidden Pattern:
+
+```typescript
+// features/class/hooks/useClassData.ts
+import { getCurriculumById } from "@/features/curriculum/api"; // Forbidden: direct import from another slice
+
+// entities/class/types/index.ts
+import { CurriculumType } from "@/entities/curriculum/types"; // Forbidden: direct import from another slice
+```
+
+# Segment Structure
+
+Each slice is composed of segments. Segments are distinguished by the technical nature of the code.
+
+## Layer-specific Segment Structure
+
+**entities layer:**
+- `types` - Type definitions
+- `constants` - Constant definitions
+- `hooks` - Entity-related hooks
+
+**features layer:**
+- `ui` - UI components
+- `hooks` - Feature-related hooks
+
+**widgets layer:**
+- `ui` - Widget UI components
+- `lib` - Widget internal libraries
+- `model` - Widget internal logic/state
+
+**pages layer:**
+- `ui` - Page UI components
+- `model` - Page internal logic/state
+
+**shared layer:**
+- `apis` - API clients/communication
+- `assets` - Static assets (images, icons, etc.)
+- `constants` - Common constants
+- `hooks` - Common hooks
+- `libs` - External library wrappers
+- `stores` - State management stores
+- `styles` - Style-related code
+- `types` - Common type definitions
+- `ui` - Common UI components
+- `utils` - Utility functions
+
+## Segment Structure Rules
+
+**Rule:** Each slice should follow the segment structure appropriate for its layer.
+
+**Reasoning:**
+- Maintains code consistency
+- Facilitates code navigation
+- Improves maintainability
+
+#### Recommended Pattern:
+
+```
+src/
+├── features/
+│   ├── class/
+│   │   ├── ui/
+│   │   │   └── ClassForm.tsx
+│   │   └── hooks/
+│   │       └── useClassData.ts
+│   └── category/
+│       ├── ui/
+│       │   └── CategorySelect.tsx
+│       └── hooks/
+│           └── useCategoryList.ts
+```
+
+# Code Style and Organization Rules
+
+## Public API Principle
+
+**Rule:** Each slice should provide a Public API through an `index.ts` file.
+
+**Reasoning:**
+- Enhances encapsulation
+- Minimizes external impact when changing internal implementation
+- Establishes clear dependency boundaries
+
+#### Recommended Pattern:
+
+```typescript
+// entities/class/index.ts
+export type { Class, ClassContent } from './types';
+export { useClassData } from './hooks/useClassData';
+export { CLASS_STATUS } from './constants';
+
+// Usage example
+import { Class, useClassData, CLASS_STATUS } from '@/entities/class';
+```
+
+## Naming Conventions
+
+**Rule:** Use consistent naming conventions.
+
+**Reasoning:**
+- Improves code readability
+- Facilitates code navigation
+- Maintains consistency
+
+#### Recommended Pattern:
+
+- Components: PascalCase (e.g., `ClassForm`, `CategorySelect`)
+- Hooks: camelCase with 'use' prefix (e.g., `useClassData`, `useCategoryList`)
+- Types: PascalCase (e.g., `ClassType`, `UserRole`)
+- Constants: UPPER_SNAKE_CASE (e.g., `API_URL`, `MAX_ATTEMPTS`)
+- Utility functions: camelCase (e.g., `formatDate`, `validateEmail`)
+
+## Separating Conditional Rendering
+
+**Rule:** Separate complex conditional rendering into distinct components.
+
+**Reasoning:**
+- Improves code readability
+- Clarifies responsibility separation
+- Increases component reusability
+
+#### Recommended Pattern:
+
+```tsx
+// Recommended: Separate into distinct components
+function ClassContent() {
+  const { role } = useAuth();
+  
+  // Render different components based on role
+  return role === 'teacher' ? <TeacherView /> : <StudentView />;
+}
+
+// TeacherView component
+function TeacherView() {
+  return (
+    <div>
+      <EditButton />
+      <DeleteButton />
+      <ClassDetails editable />
+    </div>
+  );
+}
+
+// StudentView component
+function StudentView() {
+  return (
+    <div>
+      <EnrollButton />
+      <ClassDetails />
+    </div>
+  );
+}
+```
+
+## Limiting State Management Scope
+
+**Rule:** Limit state management to the necessary scope.
+
+**Reasoning:**
+- Prevents unnecessary re-renders
+- Reduces coupling between components
+- Improves maintainability
+
+#### Recommended Pattern:
+
+```tsx
+// Recommended: Limit state to necessary scope
+function ClassEditor() {
+  // State needed for the entire class editor
+  const [classData, setClassData] = useState(initialData);
+  
+  return (
+    <div>
+      <ClassBasicInfo 
+        data={classData.basicInfo} 
+        onChange={updateBasicInfo} 
+      />
+      <ClassContentEditor 
+        data={classData.content} 
+        onChange={updateContent} 
+      />
+      {/* Other components */}
+    </div>
+  );
+}
+
+// State needed only within ClassContentEditor is kept here
+function ClassContentEditor({ data, onChange }) {
+  // Local state - independent from parent component
+  const [activeTab, setActiveTab] = useState('overview');
+  
+  return (
+    <div>
+      <Tabs activeTab={activeTab} onChange={setActiveTab} />
+      {activeTab === 'overview' && <OverviewEditor data={data.overview} onChange={updateOverview} />}
+      {/* Other tabs */}
+    </div>
+  );
+}
+```
+
+# Practical Recommendations
+
+## Consistent Directory Structure
+
+**Recommendation:** Maintain a consistent directory structure for each slice.
+
+```
+src/features/class/
+├── ui/
+│   ├── ClassForm.tsx
+│   └── ClassPreview.tsx
+├── hooks/
+│   ├── useClassForm.ts
+│   └── useClassSubmit.ts
+├── types/
+│   └── index.ts
+└── index.ts  // Public API
+```
+
+## Common Code Location
+
+**Recommendation:** Place code used by multiple slices in the `shared` layer.
+
+```
+src/shared/
+├── ui/
+│   ├── Button/
+│   ├── Input/
+│   └── Modal/
+├── hooks/
+│   ├── useDebounce.ts
+│   └── useLocalStorage.ts
+└── utils/
+    ├── date.ts
+    └── validation.ts
+```
+
+## Test File Location
+
+**Recommendation:** Place test files in the same directory as the file being tested.
+
+```
+src/features/class/ui/
+├── ClassForm.tsx
+└── ClassForm.test.tsx
+```
+
+## Refactoring Priorities
+
+**Recommendation:** After implementing functionality, consider refactoring in the following order:
+
+1. Fix violations of layer dependency rules
+2. Fix violations of slice dependency rules
+3. Organize Public API structure
+4. Optimize segment structure
+5. Maintain code style consistency 
