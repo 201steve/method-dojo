@@ -1,11 +1,11 @@
 // src/shared/ui/drawer/ProblemDrawer.tsx
+import { CloseOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import type { Problem } from '@entities/problem/types/type';
-import { ProblemCard } from '@features/problem-browsing';
 import {
   useProblems,
   type ProblemMethod,
 } from '@features/problem-storage/hooks/useProblems';
-import { Col, Drawer, Row, Space, Typography } from 'antd';
+import { Button, Card, Space, Typography } from 'antd';
 
 type ProblemType = 'array' | 'object' | 'string' | 'number' | 'math';
 
@@ -85,10 +85,10 @@ export function ProblemDrawer({
     return config.title;
   };
 
-  // 문제 선택 핸들러
+  // 문제 선택 핸들러 (Drawer는 닫지 않음)
   const handleProblemSelect = (problem: Problem): void => {
     onProblemSelect(problem);
-    onClose(); // 문제 선택 후 Drawer 닫기
+    // Drawer를 닫지 않음
   };
 
   // 난이도별로 문제 분류
@@ -99,124 +99,259 @@ export function ProblemDrawer({
   const advancedProblems = problems.filter((p) => p.difficulty === 'advanced');
 
   return (
-    <Drawer
-      title={getDrawerTitle()}
-      placement="left"
-      onClose={onClose}
-      open={open}
-      width={300}
-      styles={{
-        body: { padding: '16px' },
+    <div
+      style={{
+        position: 'fixed',
+        left: open ? '0' : '-300px',
+        top: '60px', // GNB 높이만큼 아래에 위치
+        width: '300px',
+        height: 'calc(100vh - 60px)',
+        backgroundColor: '#fff',
+        borderRight: '1px solid #f0f0f0',
+        boxShadow: '2px 0 8px rgba(0, 0, 0, 0.1)',
+        transition: 'left 0.3s ease',
+        zIndex: 1000,
+        overflow: 'auto',
       }}
     >
-      <Space direction="vertical" size={24} style={{ width: '100%' }}>
-        {/* 메서드 설명 (Array 메서드가 선택된 경우) */}
-        {(type === 'array' || type === 'object') &&
-          method &&
-          method !== 'all' && (
-            <div
-              style={{
-                padding: '12px',
-                backgroundColor: type === 'array' ? '#f6ffed' : '#f0f5ff',
-                border:
-                  type === 'array' ? '1px solid #b7eb8f' : '1px solid #adc6ff',
-                borderRadius: '6px',
-                marginBottom: '8px',
-              }}
-            >
-              <Typography.Text
+      {/* X 버튼이 있는 헤더 */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '16px',
+          borderBottom: '1px solid #f0f0f0',
+          position: 'sticky',
+          top: 0,
+          backgroundColor: '#fff',
+          zIndex: 1,
+        }}
+      >
+        <Typography.Title level={5} style={{ margin: 0 }}>
+          {getDrawerTitle()}
+        </Typography.Title>
+        <Button
+          type="text"
+          icon={<CloseOutlined />}
+          onClick={onClose}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        />
+      </div>
+
+      {/* TodoList 스타일의 문제 목록 */}
+      <div style={{ padding: '16px' }}>
+        <Space direction="vertical" size={24} style={{ width: '100%' }}>
+          {/* 메서드 설명 (Array 메서드가 선택된 경우) */}
+          {(type === 'array' || type === 'object') &&
+            method &&
+            method !== 'all' && (
+              <div
                 style={{
-                  fontSize: '13px',
-                  color: type === 'array' ? '#389e0d' : '#1890ff',
+                  padding: '12px',
+                  backgroundColor: type === 'array' ? '#f6ffed' : '#f0f5ff',
+                  border:
+                    type === 'array'
+                      ? '1px solid #b7eb8f'
+                      : '1px solid #adc6ff',
+                  borderRadius: '6px',
+                  marginBottom: '8px',
                 }}
               >
-                {
-                  METHOD_CONFIG[method as keyof typeof METHOD_CONFIG]
-                    ?.description
-                }{' '}
-                관련 문제들입니다
+                <Typography.Text
+                  style={{
+                    fontSize: '13px',
+                    color: type === 'array' ? '#389e0d' : '#1890ff',
+                  }}
+                >
+                  {
+                    METHOD_CONFIG[method as keyof typeof METHOD_CONFIG]
+                      ?.description
+                  }{' '}
+                  관련 문제들입니다
+                </Typography.Text>
+              </div>
+            )}
+
+          {/* TodoList 스타일 초급 섹션 */}
+          {beginnerProblems.length > 0 && (
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+              <Typography.Title
+                level={5}
+                style={{ marginBottom: 8, color: '#52c41a' }}
+              >
+                🟢 초급 ({beginnerProblems.length}문제)
+              </Typography.Title>
+              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                {beginnerProblems.map((problem) => (
+                  <Card
+                    key={problem.id}
+                    size="small"
+                    hoverable
+                    onClick={() => handleProblemSelect(problem)}
+                    style={{
+                      cursor: 'pointer',
+                      border: '1px solid #d9d9d9',
+                      borderRadius: '6px',
+                    }}
+                    bodyStyle={{ padding: '12px' }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <CheckCircleOutlined
+                        style={{ color: '#52c41a', fontSize: '16px' }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <Typography.Text strong style={{ fontSize: '14px' }}>
+                          {problem.title}
+                        </Typography.Text>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#666',
+                            marginTop: '2px',
+                          }}
+                        >
+                          {problem.description}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </Space>
+            </Space>
+          )}
+
+          {/* TodoList 스타일 중급 섹션 */}
+          {intermediateProblems.length > 0 && (
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+              <Typography.Title
+                level={5}
+                style={{ marginBottom: 8, color: '#faad14' }}
+              >
+                🟡 중급 ({intermediateProblems.length}문제)
+              </Typography.Title>
+              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                {intermediateProblems.map((problem) => (
+                  <Card
+                    key={problem.id}
+                    size="small"
+                    hoverable
+                    onClick={() => handleProblemSelect(problem)}
+                    style={{
+                      cursor: 'pointer',
+                      border: '1px solid #d9d9d9',
+                      borderRadius: '6px',
+                    }}
+                    bodyStyle={{ padding: '12px' }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <CheckCircleOutlined
+                        style={{ color: '#faad14', fontSize: '16px' }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <Typography.Text strong style={{ fontSize: '14px' }}>
+                          {problem.title}
+                        </Typography.Text>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#666',
+                            marginTop: '2px',
+                          }}
+                        >
+                          {problem.description}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </Space>
+            </Space>
+          )}
+
+          {/* TodoList 스타일 고급 섹션 */}
+          {advancedProblems.length > 0 && (
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+              <Typography.Title
+                level={5}
+                style={{ marginBottom: 8, color: '#f5222d' }}
+              >
+                🔴 고급 ({advancedProblems.length}문제)
+              </Typography.Title>
+              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                {advancedProblems.map((problem) => (
+                  <Card
+                    key={problem.id}
+                    size="small"
+                    hoverable
+                    onClick={() => handleProblemSelect(problem)}
+                    style={{
+                      cursor: 'pointer',
+                      border: '1px solid #d9d9d9',
+                      borderRadius: '6px',
+                    }}
+                    bodyStyle={{ padding: '12px' }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <CheckCircleOutlined
+                        style={{ color: '#f5222d', fontSize: '16px' }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <Typography.Text strong style={{ fontSize: '14px' }}>
+                          {problem.title}
+                        </Typography.Text>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#666',
+                            marginTop: '2px',
+                          }}
+                        >
+                          {problem.description}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </Space>
+            </Space>
+          )}
+
+          {/* 문제가 없는 경우 */}
+          {problems.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <Typography.Title level={5} type="secondary">
+                {config.icon} 문제 준비 중...
+              </Typography.Title>
+              <Typography.Text type="secondary">
+                곧 다양한 문제들을 만나보실 수 있습니다!
               </Typography.Text>
             </div>
           )}
-
-        {/* 초급 섹션 */}
-        {beginnerProblems.length > 0 && (
-          <Space direction="vertical" size="small" style={{ width: '100%' }}>
-            <Typography.Title
-              level={5}
-              style={{ marginBottom: 8, color: '#52c41a' }}
-            >
-              🟢 초급 ({beginnerProblems.length}문제)
-            </Typography.Title>
-            <Row gutter={[8, 8]}>
-              {beginnerProblems.map((problem) => (
-                <Col xs={24} key={problem.id}>
-                  <ProblemCard
-                    problem={problem}
-                    onSelect={handleProblemSelect}
-                  />
-                </Col>
-              ))}
-            </Row>
-          </Space>
-        )}
-
-        {/* 중급 섹션 */}
-        {intermediateProblems.length > 0 && (
-          <Space direction="vertical" size="small" style={{ width: '100%' }}>
-            <Typography.Title
-              level={5}
-              style={{ marginBottom: 8, color: '#faad14' }}
-            >
-              🟡 중급 ({intermediateProblems.length}문제)
-            </Typography.Title>
-            <Row gutter={[8, 8]}>
-              {intermediateProblems.map((problem) => (
-                <Col xs={24} key={problem.id}>
-                  <ProblemCard
-                    problem={problem}
-                    onSelect={handleProblemSelect}
-                  />
-                </Col>
-              ))}
-            </Row>
-          </Space>
-        )}
-
-        {/* 고급 섹션 */}
-        {advancedProblems.length > 0 && (
-          <Space direction="vertical" size="small" style={{ width: '100%' }}>
-            <Typography.Title
-              level={5}
-              style={{ marginBottom: 8, color: '#f5222d' }}
-            >
-              🔴 고급 ({advancedProblems.length}문제)
-            </Typography.Title>
-            <Row gutter={[8, 8]}>
-              {advancedProblems.map((problem) => (
-                <Col xs={24} key={problem.id}>
-                  <ProblemCard
-                    problem={problem}
-                    onSelect={handleProblemSelect}
-                  />
-                </Col>
-              ))}
-            </Row>
-          </Space>
-        )}
-
-        {/* 문제가 없는 경우 */}
-        {problems.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Typography.Title level={5} type="secondary">
-              {config.icon} 문제 준비 중...
-            </Typography.Title>
-            <Typography.Text type="secondary">
-              곧 다양한 문제들을 만나보실 수 있습니다!
-            </Typography.Text>
-          </div>
-        )}
-      </Space>
-    </Drawer>
+        </Space>
+      </div>
+    </div>
   );
 }
