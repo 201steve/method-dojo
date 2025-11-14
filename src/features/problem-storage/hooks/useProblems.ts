@@ -20,7 +20,6 @@ import { useState, useEffect } from 'react';
 
 const STORAGE_KEY = 'js-problems';
 
-// 메서드별 문제 분류 타입
 export type ArrayMethod =
   | 'forEach'
   | 'map'
@@ -43,35 +42,33 @@ export type ObjectMethod =
   | 'assign'
   | 'advanced';
 
-export type ProblemMethod = ArrayMethod | ObjectMethod | 'all'; // 'all'은 전체 문제
+export type ProblemMethod = ArrayMethod | ObjectMethod | 'all';
 
-// 메서드별 문제 범위 정의
-const METHOD_RANGES = {
-  forEach: { start: 1, end: 20 }, // array-1 ~ array-20
-  map: { start: 21, end: 45 }, // array-21 ~ array-45
-  filter: { start: 46, end: 70 }, // array-46 ~ array-70
-  find: { start: 71, end: 90 }, // array-71 ~ array-90
-  split: { start: 91, end: 110 }, // array-91 ~ array-110
-  join: { start: 111, end: 130 }, // array-111 ~ array-130
-  reduce: { start: 131, end: 155 }, // array-131 ~ array-155
-  slice: { start: 156, end: 175 }, // array-156 ~ array-175
-  indexOf: { start: 176, end: 195 }, // array-176 ~ array-195
-  sort: { start: 196, end: 220 }, // array-196 ~ array-220
-  some: { start: 221, end: 240 }, // array-221 ~ array-240
-  every: { start: 241, end: 260 }, // array-241 ~ array-260
-} as const;
+const METHOD_RANGES: { [key: string]: { start: number; end: number } } = {
+  forEach: { start: 1, end: 20 },
+  map: { start: 21, end: 45 },
+  filter: { start: 46, end: 70 },
+  find: { start: 71, end: 90 },
+  split: { start: 91, end: 110 },
+  join: { start: 111, end: 130 },
+  reduce: { start: 131, end: 155 },
+  slice: { start: 156, end: 175 },
+  indexOf: { start: 176, end: 195 },
+  sort: { start: 196, end: 220 },
+  some: { start: 221, end: 240 },
+  every: { start: 241, end: 260 },
+};
 
-// Object 메서드별 문제 범위 정의 (각 메서드별 30개: 초급10, 중급10, 고급10)
-const OBJECT_METHOD_RANGES = {
-  basic: { start: 1, end: 30 }, // object-1 ~ object-30
-  keys: { start: 31, end: 60 }, // object-31 ~ object-60
-  values: { start: 61, end: 90 }, // object-61 ~ object-90
-  entries: { start: 91, end: 120 }, // object-91 ~ object-120
-  assign: { start: 121, end: 150 }, // object-121 ~ object-150
-  advanced: { start: 151, end: 180 }, // object-151 ~ object-180
-} as const;
+const OBJECT_METHOD_RANGES: { [key: string]: { start: number; end: number } } =
+  {
+    basic: { start: 1, end: 30 },
+    keys: { start: 31, end: 60 },
+    values: { start: 61, end: 90 },
+    entries: { start: 91, end: 120 },
+    assign: { start: 121, end: 150 },
+    advanced: { start: 151, end: 180 },
+  };
 
-// Array 메서드 정보
 export const ARRAY_METHODS = [
   { key: 'forEach', label: 'forEach', description: '배열 순회', icon: '🔄' },
   { key: 'map', label: 'map', description: '배열 변환', icon: '🔄' },
@@ -85,9 +82,8 @@ export const ARRAY_METHODS = [
   { key: 'sort', label: 'sort', description: '배열 정렬', icon: '📊' },
   { key: 'some', label: 'some', description: '일부 조건 확인', icon: '❓' },
   { key: 'every', label: 'every', description: '모든 조건 확인', icon: '✅' },
-] as const;
+];
 
-// Object 메서드 정보
 export const OBJECT_METHODS = [
   { key: 'basic', label: 'Basic', description: '기본 객체 조작', icon: '🔧' },
   {
@@ -120,41 +116,38 @@ export const OBJECT_METHODS = [
     description: '고급 객체 기능',
     icon: '⚡',
   },
-] as const;
-
-// 모든 타입별 문제 통합
-const ALL_PROBLEMS: Problem[] = [
-  ...FOR_EACH_PROBLEMS,
-  ...ARRAY_MAP_PROBLEMS,
-  ...ARRAY_FILTER_PROBLEMS,
-  ...ARRAY_FIND_PROBLEMS,
-  ...ARRAY_SPLIT_PROBLEMS,
-  ...ARRAY_JOIN_PROBLEMS,
-  ...ARRAY_REDUCE_PROBLEMS,
-  ...ARRAY_SLICE_PROBLEMS,
-  ...ARRAY_INDEXOF_PROBLEMS,
-  ...ARRAY_SORT_PROBLEMS,
-  ...ARRAY_SOME_PROBLEMS,
-  ...ARRAY_EVERY_PROBLEMS,
-  ...OBJECT_PROBLEMS,
-  ...STRING_PROBLEMS,
-  ...STRING_CHARAT_PROBLEMS,
-  ...NUMBER_PROBLEMS,
-  ...MATH_PROBLEMS,
 ];
+
+const ALL_PROBLEMS: Problem[] = ([] as Problem[]).concat(
+  FOR_EACH_PROBLEMS,
+  ARRAY_MAP_PROBLEMS,
+  ARRAY_FILTER_PROBLEMS,
+  ARRAY_FIND_PROBLEMS,
+  ARRAY_SPLIT_PROBLEMS,
+  ARRAY_JOIN_PROBLEMS,
+  ARRAY_REDUCE_PROBLEMS,
+  ARRAY_SLICE_PROBLEMS,
+  ARRAY_INDEXOF_PROBLEMS,
+  ARRAY_SORT_PROBLEMS,
+  ARRAY_SOME_PROBLEMS,
+  ARRAY_EVERY_PROBLEMS,
+  OBJECT_PROBLEMS,
+  STRING_PROBLEMS,
+  STRING_CHARAT_PROBLEMS,
+  NUMBER_PROBLEMS,
+  MATH_PROBLEMS
+);
 
 export function useProblems() {
   const [problems, setProblems] = useState<Problem[]>([]);
 
   useEffect(() => {
-    // 개발 모드에서는 항상 ALL_PROBLEMS 사용 (localStorage 무시)
     if (import.meta.env.DEV) {
       setProblems(ALL_PROBLEMS);
       console.log('개발 모드: 모든 타입 문제 데이터 로드됨');
       return;
     }
 
-    // 프로덕션에서는 localStorage 사용
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       setProblems(JSON.parse(stored));
@@ -164,74 +157,91 @@ export function useProblems() {
     }
   }, []);
 
-  const getProblemsByDifficulty = (
-    difficulty: ProblemDifficulty
-  ): Problem[] => {
-    return problems.filter((p) => p.difficulty === difficulty);
-  };
+  function getProblemsByDifficulty(difficulty: ProblemDifficulty): Problem[] {
+    const filteredProblems: Problem[] = [];
+    for (let i = 0; i < problems.length; i++) {
+      if (problems[i].difficulty === difficulty) {
+        filteredProblems.push(problems[i]);
+      }
+    }
+    return filteredProblems;
+  }
 
   const getProblemById = (id: string): Problem | undefined => {
-    return problems.find((p) => p.id === id);
+    const found = problems.filter((p) => p.id === id);
+    if (found.length > 0) {
+      return found[0];
+    }
+    return undefined;
   };
 
   const getProblemsByType = (
     type: 'array' | 'object' | 'string' | 'number' | 'math'
   ): Problem[] => {
     return problems.filter((problem) => {
-      switch (type) {
-        case 'array':
-          return problem.id.startsWith('array-');
-        case 'object':
-          return problem.id.startsWith('object-');
-        case 'string':
-          return problem.id.startsWith('string-');
-        case 'number':
-          return problem.id.startsWith('number-');
-        case 'math':
-          return problem.id.startsWith('math-');
-        default:
-          return false;
+      if (type === 'array') {
+        return problem.id.startsWith('array-');
+      } else if (type === 'object') {
+        return problem.id.startsWith('object-');
+      } else if (type === 'string') {
+        return problem.id.startsWith('string-');
+      } else if (type === 'number') {
+        return problem.id.startsWith('number-');
+      } else if (type === 'math') {
+        return problem.id.startsWith('math-');
+      } else {
+        return false;
       }
     });
   };
 
-  // 메서드별 문제 가져오기 (Array 전용)
   const getProblemsByArrayMethod = (method: ArrayMethod): Problem[] => {
     const range = METHOD_RANGES[method];
     return problems.filter((problem) => {
-      if (!problem.id.startsWith('array-')) return false;
-
-      const numPart = problem.id.replace('array-', '');
-      const num = parseInt(numPart, 10);
-      return num >= range.start && num <= range.end;
+      if (problem.id.startsWith('array-')) {
+        const numPart = problem.id.replace('array-', '');
+        const num = parseInt(numPart);
+        if (num >= range.start && num <= range.end) {
+          return true;
+        }
+      }
+      return false;
     });
   };
 
-  // 메서드별 문제 가져오기 (Object 전용)
   const getProblemsByObjectMethod = (method: ObjectMethod): Problem[] => {
     const range = OBJECT_METHOD_RANGES[method];
-    return problems.filter((problem) => {
-      if (!problem.id.startsWith('object-')) return false;
-
+    const filtered = problems.filter((problem) => {
+      if (!problem.id.startsWith('object-')) {
+        return false;
+      }
       const numPart = problem.id.replace('object-', '');
-      const num = parseInt(numPart, 10);
+      const num = parseInt(numPart);
       return num >= range.start && num <= range.end;
     });
+    return filtered;
   };
 
-  // 타입과 메서드별 문제 가져오기
-  const getProblemsByTypeAndMethod = (
+  function getProblemsByTypeAndMethod(
     type: 'array' | 'object' | 'string' | 'number' | 'math',
     method?: ProblemMethod
-  ): Problem[] => {
-    if (type === 'array' && method && method !== 'all') {
-      return getProblemsByArrayMethod(method as ArrayMethod);
+  ): Problem[] {
+    let result: Problem[] = [];
+
+    if (method && method !== 'all') {
+      if (type === 'array') {
+        result = getProblemsByArrayMethod(method as ArrayMethod);
+      } else if (type === 'object') {
+        result = getProblemsByObjectMethod(method as ObjectMethod);
+      } else {
+        result = getProblemsByType(type);
+      }
+    } else {
+      result = getProblemsByType(type);
     }
-    if (type === 'object' && method && method !== 'all') {
-      return getProblemsByObjectMethod(method as ObjectMethod);
-    }
-    return getProblemsByType(type);
-  };
+
+    return result;
+  }
 
   return {
     problems,
