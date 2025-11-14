@@ -13,6 +13,7 @@ jobs:
         env:
           WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}
         run: |
+          echo "Calling Webhook URL: $WEBHOOK_URL"
           curl -X POST \
             -H "Content-Type: application/json"\
             -d '{
