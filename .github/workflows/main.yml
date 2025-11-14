@@ -5,11 +5,11 @@ on:
     types: [opened, synchronized, reopened]
 
 jobs:
-  notify:
+  notify-webhook:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Send PR notification to webhook
-        # GitHub Secret에 저장된 URL을 환경 변수로 설정
         run: |
           curl -X POST \
             -H "Content-Type: application/json"\
