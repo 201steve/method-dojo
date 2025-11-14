@@ -50,19 +50,12 @@ export const EXTENSIONS: Extension[] = [
 
   // 키맵 설정
   keymap.of([
-    // 기본 키맵 (복사, 붙여넣기, 실행취소 등)
     ...defaultKeymap,
-    // 히스토리 키맵 (Ctrl+Z, Ctrl+Y)
     ...historyKeymap,
-    // 검색 키맵 (Ctrl+F)
     ...searchKeymap,
-    // 폴딩 키맵
     ...foldKeymap,
-    // 자동완성 키맵
     ...completionKeymap,
-    // 괄호 키맵
     ...closeBracketsKeymap,
-    // 커스텀 키바인딩 (네이티브 클립보드 이벤트 허용)
     {
       key: 'Ctrl-c',
       run: () => false, // 네이티브 복사 허용
