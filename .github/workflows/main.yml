@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Send PR notification to webhook
         # GitHub Secret에 저장된 URL을 환경 변수로 설정
-        env:
-          WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}
         run: |
           curl -X POST \
             -H "Content-Type: application/json"\
