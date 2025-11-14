@@ -10,6 +10,8 @@ jobs:
     
     steps:
       - name: Send PR notification to webhook
+        env:
+            WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}
         run: |
           curl -X POST \
             -H "Content-Type: application/json"\
@@ -22,4 +24,4 @@ jobs:
             "pull_request_title":"${{github.event.pull_request.title}}",
             "pull_request_author":"${{github.event.pull_request.user.login}}"
             }' \
-            "https://vktmpwxdcwznmu8dcnpeh1gv.hooks.n8n.cloud/webhook/a7b6ea5f-4687-460e-9100-82823422e8d9/webhook"
+            "$WEBHOOK_URL"
