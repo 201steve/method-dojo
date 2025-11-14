@@ -63,9 +63,7 @@ const CommonLayout = () => {
     <Flex vertical style={{ minHeight: '100vh' }}>
       <GNB onHomeClick={handleHomeClick} onDrawerOpen={handleDrawerOpen} />
 
-      {/* 사이드바 + 메인 콘텐츠 레이아웃으로 변경 */}
       <Flex style={{ flex: 1, position: 'relative' }}>
-        {/* 고정 사이드바 */}
         <ProblemDrawer
           type={drawerType}
           method={drawerMethod}
