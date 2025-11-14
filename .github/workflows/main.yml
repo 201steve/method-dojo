@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Send PR notification to webhook
         env:
-            WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.MY_WEBHOOK_URL }}
         run: |
           curl -X POST \
             -H "Content-Type: application/json"\
