@@ -42,7 +42,7 @@ export function useCodeExecution() {
       // 정답 검증
       let isCorrect = false;
       let feedback = '';
-
+      console.log(feedback);
       if (expectedOutput) {
         // 공백과 개행 정규화해서 비교
         const normalizedActual = outputString.trim().replace(/\s+/g, ' ');
