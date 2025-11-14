@@ -73,7 +73,7 @@ const CommonLayout = () => {
           onClose={handleDrawerClose}
           onProblemSelect={handleProblemSelect}
         />
-
+        <h1>helloworld</h1>
         {/* 메인 콘텐츠 영역 */}
         <div
           style={{

@@ -6,19 +6,12 @@ import { ExecutionResult } from '@widgets/execution-result/ui';
 import { Row, Col } from 'antd';
 
 interface ProblemSolvingWorkspaceProps {
-  /** 문제 정보 */
   problem: Problem;
-  /** 현재 코드 */
   code: string;
-  /** 실행 결과 */
   result: Execution | null;
-  /** 실행 중 상태 */
   isExecuting: boolean;
-  /** 코드 변경 핸들러 */
   onCodeChange: (code: string) => void;
-  /** 코드 실행 핸들러 */
   onRunCode: () => void;
-  /** 초기화 핸들러 */
   onReset: () => void;
 }
 
