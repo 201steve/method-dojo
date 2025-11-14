@@ -10,51 +10,49 @@ export function useCodeExecution() {
   ): Promise<Execution> => {
     setIsExecuting(true);
 
+    // 1. 콘솔 캡처 설정
+    // 원본 console.log를 백업하고, 출력을 저장할 배열을 생성합니다.
+    const originalConsoleLog = console.log;
+    const consoleOutputs: unknown[] = [];
+
+    console.log = (...args: unknown[]) => {
+      consoleOutputs.push(...args);
+      originalConsoleLog(...args); // 실제 콘솔에도 로그를 출력합니다.
+    };
+
     try {
+      // 2. 코드 실행 및 시간 측정
       const startTime = performance.now();
 
-      // 콘솔 출력을 캡처하기 위한 배열
-      const consoleOutputs: unknown[] = [];
-
-      // console.log 오버라이드
-      const originalConsoleLog = console.log;
-      console.log = (...args: unknown[]) => {
-        consoleOutputs.push(...args);
-        originalConsoleLog(...args);
-      };
-
-      // 코드 실행
       const func = new Function(code);
-      const result = func();
-
-      // console.log 복원
-      console.log = originalConsoleLog;
+      const result: unknown = func(); // 'any' 대신 'unknown'을 명시적으로 사용
 
       const endTime = performance.now();
       const executionTime = endTime - startTime;
 
-      // 실제 출력 결과 정리
-      const actualOutput = result !== undefined ? result : consoleOutputs;
+      // 3. 출력 결과 처리
+      // 함수의 반환 값이 있으면 그것을, 없으면(undefined) 콘솔 출력 값을 사용합니다.
+      const actualOutput: unknown =
+        result !== undefined ? result : consoleOutputs;
+
       const outputString = Array.isArray(actualOutput)
         ? actualOutput.join('\n')
         : String(actualOutput);
 
-      // 정답 검증
+      // 4. 정답 검증
       let isCorrect = false;
-      let feedback = '';
+      let feedback = ''; // expectedOutput이 없는 경우 빈 문자열이 됩니다.
 
       if (expectedOutput) {
-        // 공백과 개행 정규화해서 비교
+        // 공백과 개행을 정규화하여 비교
         const normalizedActual = outputString.trim().replace(/\s+/g, ' ');
         const normalizedExpected = expectedOutput.trim().replace(/\s+/g, ' ');
 
         isCorrect = normalizedActual === normalizedExpected;
 
-        if (isCorrect) {
-          feedback = '🎉 정답입니다!';
-        } else {
-          feedback = '❌ 틀렸습니다. 예상 출력과 다릅니다.';
-        }
+        feedback = isCorrect
+          ? '🎉 정답입니다!'
+          : '❌ 틀렸습니다. 예상 출력과 다릅니다.';
       }
 
       return {
@@ -65,6 +63,7 @@ export function useCodeExecution() {
         feedback,
       };
     } catch (error) {
+      // 5. 에러 핸들링
       return {
         success: false,
         error:
@@ -76,6 +75,9 @@ export function useCodeExecution() {
         executionTime: 0,
       };
     } finally {
+      // 6. 정리 (가장 중요)
+      // 성공하든, 오류가 발생하든 항상 console.log를 원본으로 복원합니다.
+      console.log = originalConsoleLog;
       setIsExecuting(false);
     }
   };
