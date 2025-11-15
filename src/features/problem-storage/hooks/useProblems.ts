@@ -16,7 +16,7 @@ import { NUMBER_PROBLEMS } from '@entities/problem/model/number-problems';
 import { STRING_CHARAT_PROBLEMS } from '@entities/problem/model/string-charat-problems';
 import { STRING_PROBLEMS } from '@entities/problem/model/string-problems';
 import type { ProblemDifficulty, Problem } from '@entities/problem/types/type';
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 const STORAGE_KEY = 'js-problems';
 
@@ -43,6 +43,19 @@ export type ObjectMethod =
   | 'advanced';
 
 export type ProblemMethod = ArrayMethod | ObjectMethod | 'all';
+type ProblemType =
+  | 'array'
+  | 'object'
+  | 'string'
+  | 'number'
+  | 'math'
+  | 'unknown';
+
+// 전처리된 문제 타입
+type ProcessedProblem = Problem & {
+  problemType: ProblemType;
+  method?: ArrayMethod | ObjectMethod;
+};
 
 const METHOD_RANGES: { [key: string]: { start: number; end: number } } = {
   forEach: { start: 1, end: 20 },
@@ -118,130 +131,162 @@ export const OBJECT_METHODS = [
   },
 ];
 
-const ALL_PROBLEMS: Problem[] = ([] as Problem[]).concat(
-  FOR_EACH_PROBLEMS,
-  ARRAY_MAP_PROBLEMS,
-  ARRAY_FILTER_PROBLEMS,
-  ARRAY_FIND_PROBLEMS,
-  ARRAY_SPLIT_PROBLEMS,
-  ARRAY_JOIN_PROBLEMS,
-  ARRAY_REDUCE_PROBLEMS,
-  ARRAY_SLICE_PROBLEMS,
-  ARRAY_INDEXOF_PROBLEMS,
-  ARRAY_SORT_PROBLEMS,
-  ARRAY_SOME_PROBLEMS,
-  ARRAY_EVERY_PROBLEMS,
-  OBJECT_PROBLEMS,
-  STRING_PROBLEMS,
-  STRING_CHARAT_PROBLEMS,
-  NUMBER_PROBLEMS,
-  MATH_PROBLEMS
-);
+const ALL_PROBLEMS: Problem[] = [
+  ...FOR_EACH_PROBLEMS,
+  ...ARRAY_MAP_PROBLEMS,
+  ...ARRAY_FILTER_PROBLEMS,
+  ...ARRAY_FIND_PROBLEMS,
+  ...ARRAY_SPLIT_PROBLEMS,
+  ...ARRAY_JOIN_PROBLEMS,
+  ...ARRAY_REDUCE_PROBLEMS,
+  ...ARRAY_SLICE_PROBLEMS,
+  ...ARRAY_INDEXOF_PROBLEMS,
+  ...ARRAY_SORT_PROBLEMS,
+  ...ARRAY_SOME_PROBLEMS,
+  ...ARRAY_EVERY_PROBLEMS,
+  ...OBJECT_PROBLEMS,
+  ...STRING_PROBLEMS,
+  ...STRING_CHARAT_PROBLEMS,
+  ...NUMBER_PROBLEMS,
+  ...MATH_PROBLEMS,
+];
+
+/**
+ * 문제 ID를 기반으로 타입과 메서드를 추출합니다.
+ */
+const getProblemTypeAndMethod = (
+  id: string
+): { problemType: ProblemType; method?: ArrayMethod | ObjectMethod } => {
+  if (id.startsWith('array-')) {
+    const num = parseInt(id.replace('array-', ''), 10);
+    for (const [method, range] of Object.entries(METHOD_RANGES)) {
+      if (num >= range.start && num <= range.end) {
+        return { problemType: 'array', method: method as ArrayMethod };
+      }
+    }
+    return { problemType: 'array' };
+  }
+
+  if (id.startsWith('object-')) {
+    const num = parseInt(id.replace('object-', ''), 10);
+    for (const [method, range] of Object.entries(OBJECT_METHOD_RANGES)) {
+      if (num >= range.start && num <= range.end) {
+        return { problemType: 'object', method: method as ObjectMethod };
+      }
+    }
+    return { problemType: 'object' };
+  }
+
+  if (id.startsWith('string-')) return { problemType: 'string' };
+  if (id.startsWith('number-')) return { problemType: 'number' };
+  if (id.startsWith('math-')) return { problemType: 'math' };
+
+  return { problemType: 'unknown' };
+};
+
+/**
+ * 원본 문제 배열을 받아 problemType과 method가 추가된 배열로 전처리합니다.
+ */
+const preprocessProblems = (problems: Problem[]): ProcessedProblem[] => {
+  return problems.map((problem) => ({
+    ...problem,
+    ...getProblemTypeAndMethod(problem.id),
+  }));
+};
+
+/**
+ * 문제 데이터를 로드하고 초기화하는 함수 (useState lazy initializer용)
+ */
+const getInitialProblems = (): ProcessedProblem[] => {
+  if (import.meta.env.DEV) {
+    console.log('개발 모드: 모든 타입 문제 데이터 전처리 로드됨');
+    return preprocessProblems(ALL_PROBLEMS);
+  }
+
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try {
+      // 스토리지에 저장된 데이터는 이미 전처리된 것으로 간주
+      return JSON.parse(stored) as ProcessedProblem[];
+    } catch (e) {
+      console.error('스토리지에서 문제 파싱 실패:', e);
+      // 파싱 실패 시, 로컬 스토리지 비우고 새로 생성
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }
+
+  // 스토리지에 없거나 파싱 실패 시, 새로 전처리하고 저장
+  const processed = preprocessProblems(ALL_PROBLEMS);
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(processed));
+  } catch (e) {
+    console.error('스토리지에 문제 저장 실패:', e);
+  }
+  return processed;
+};
 
 export function useProblems() {
-  const [problems, setProblems] = useState<Problem[]>([]);
+  // useState의 lazy initializer를 사용해 최초 1회만 실행
+  const [problems] = useState<ProcessedProblem[]>(getInitialProblems);
 
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      setProblems(ALL_PROBLEMS);
-      console.log('개발 모드: 모든 타입 문제 데이터 로드됨');
-      return;
-    }
+  const getProblemsByDifficulty = useCallback(
+    (difficulty: ProblemDifficulty): ProcessedProblem[] => {
+      return problems.filter((p) => p.difficulty === difficulty);
+    },
+    [problems]
+  );
 
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      setProblems(JSON.parse(stored));
-    } else {
-      setProblems(ALL_PROBLEMS);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(ALL_PROBLEMS));
-    }
-  }, []);
+  const getProblemById = useCallback(
+    (id: string): ProcessedProblem | undefined => {
+      return problems.find((p) => p.id === id);
+    },
+    [problems]
+  );
 
-  function getProblemsByDifficulty(difficulty: ProblemDifficulty): Problem[] {
-    const filteredProblems: Problem[] = [];
-    for (let i = 0; i < problems.length; i++) {
-      if (problems[i].difficulty === difficulty) {
-        filteredProblems.push(problems[i]);
+  const getProblemsByType = useCallback(
+    (type: ProblemType): ProcessedProblem[] => {
+      return problems.filter((problem) => problem.problemType === type);
+    },
+    [problems]
+  );
+
+  const getProblemsByArrayMethod = useCallback(
+    (method: ArrayMethod): ProcessedProblem[] => {
+      return problems.filter(
+        (p) => p.problemType === 'array' && p.method === method
+      );
+    },
+    [problems]
+  );
+
+  const getProblemsByObjectMethod = useCallback(
+    (method: ObjectMethod): ProcessedProblem[] => {
+      return problems.filter(
+        (p) => p.problemType === 'object' && p.method === method
+      );
+    },
+    [problems]
+  );
+
+  const getProblemsByTypeAndMethod = useCallback(
+    (type: ProblemType, method?: ProblemMethod): ProcessedProblem[] => {
+      if (!method || method === 'all') {
+        return getProblemsByType(type);
       }
-    }
-    return filteredProblems;
-  }
 
-  const getProblemById = (id: string): Problem | undefined => {
-    const found = problems.filter((p) => p.id === id);
-    if (found.length > 0) {
-      return found[0];
-    }
-    return undefined;
-  };
-
-  const getProblemsByType = (
-    type: 'array' | 'object' | 'string' | 'number' | 'math'
-  ): Problem[] => {
-    return problems.filter((problem) => {
       if (type === 'array') {
-        return problem.id.startsWith('array-');
-      } else if (type === 'object') {
-        return problem.id.startsWith('object-');
-      } else if (type === 'string') {
-        return problem.id.startsWith('string-');
-      } else if (type === 'number') {
-        return problem.id.startsWith('number-');
-      } else if (type === 'math') {
-        return problem.id.startsWith('math-');
-      } else {
-        return false;
+        return getProblemsByArrayMethod(method as ArrayMethod);
       }
-    });
-  };
 
-  const getProblemsByArrayMethod = (method: ArrayMethod): Problem[] => {
-    const range = METHOD_RANGES[method];
-    return problems.filter((problem) => {
-      if (problem.id.startsWith('array-')) {
-        const numPart = problem.id.replace('array-', '');
-        const num = parseInt(numPart);
-        if (num >= range.start && num <= range.end) {
-          return true;
-        }
+      if (type === 'object') {
+        return getProblemsByObjectMethod(method as ObjectMethod);
       }
-      return false;
-    });
-  };
 
-  const getProblemsByObjectMethod = (method: ObjectMethod): Problem[] => {
-    const range = OBJECT_METHOD_RANGES[method];
-    const filtered = problems.filter((problem) => {
-      if (!problem.id.startsWith('object-')) {
-        return false;
-      }
-      const numPart = problem.id.replace('object-', '');
-      const num = parseInt(numPart);
-      return num >= range.start && num <= range.end;
-    });
-    return filtered;
-  };
-
-  function getProblemsByTypeAndMethod(
-    type: 'array' | 'object' | 'string' | 'number' | 'math',
-    method?: ProblemMethod
-  ): Problem[] {
-    let result: Problem[] = [];
-
-    if (method && method !== 'all') {
-      if (type === 'array') {
-        result = getProblemsByArrayMethod(method as ArrayMethod);
-      } else if (type === 'object') {
-        result = getProblemsByObjectMethod(method as ObjectMethod);
-      } else {
-        result = getProblemsByType(type);
-      }
-    } else {
-      result = getProblemsByType(type);
-    }
-
-    return result;
-  }
+      // 'string', 'number', 'math' 타입은 method를 무시하고 타입별로 반환
+      return getProblemsByType(type);
+    },
+    [getProblemsByType, getProblemsByArrayMethod, getProblemsByObjectMethod]
+  );
 
   return {
     problems,
